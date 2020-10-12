@@ -1,6 +1,7 @@
 package com.mohamed.yatproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signUpButton;
     private Switch switchBtn;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor sharedPrefEditor;
 
 
     @Override
@@ -28,7 +31,17 @@ public class MainActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signUpBtn);
         switchBtn = findViewById(R.id.rememberMeSwitch);
 
+        sharedPreferences = getSharedPreferences("users", MODE_PRIVATE);
+        sharedPrefEditor = sharedPreferences.edit();
+
+        boolean rememberMe = sharedPreferences.getBoolean("rememberme", false);
+
         setViewsClickListeners();
+
+        if (rememberMe) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void setViewsClickListeners() {
@@ -55,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchButtonChecked(boolean isChecked) {
+        sharedPrefEditor.putBoolean("rememberme", isChecked);
+        sharedPrefEditor.apply();
         if (isChecked) {
             Toast.makeText(MainActivity.this, "I will remember you", Toast.LENGTH_LONG).show();
         } else {

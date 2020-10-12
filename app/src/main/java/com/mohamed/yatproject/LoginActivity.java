@@ -1,5 +1,6 @@
 package com.mohamed.yatproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -40,6 +41,10 @@ public class LoginActivity extends AppCompatActivity {
                     passwordEditText.setError(null);
 
                     // TODO to add login logic here
+
+                    Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                    loginIntent.putExtra("email", email);
+                    startActivity(loginIntent);
                 }
             }
         });
