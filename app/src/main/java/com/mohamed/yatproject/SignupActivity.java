@@ -27,6 +27,9 @@ public class SignupActivity extends AppCompatActivity {
         setViewsOnClickListeners();
     }
 
+    /**
+     * To initialize the views
+     */
     private void initializeView() {
         addUserImage = findViewById(R.id.addUserImage);
         emailEditText = findViewById(R.id.emailEditText);
