@@ -1,42 +1,46 @@
 package com.mohamed.yatproject;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import java.io.File;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView employeesRV;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedPrefEditor;
+    private FloatingActionButton addEmployeesBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         employeesRV = findViewById(R.id.emoloyeesRV);
-
-        sharedPreferences = getSharedPreferences("users", MODE_PRIVATE);
-        sharedPrefEditor = sharedPreferences.edit();
-        boolean isUserChoosedRememberMe = sharedPreferences.getBoolean("rememberme", false);
-
-        Toast.makeText(this, "User choose for remember me: " + isUserChoosedRememberMe, Toast.LENGTH_LONG).show();
+        addEmployeesBtn = findViewById(R.id.addEmployeesBtn);
 
         ArrayList<String> names = fakeEmployees();
         EmployeesRVAdapter emAdapter = new EmployeesRVAdapter(names);
 
         employeesRV.setAdapter(emAdapter);
         employeesRV.setLayoutManager(new LinearLayoutManager(this));
+
+        addEmployeesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addEmployeeIntent = new Intent(HomeActivity.this, AddEmployeeActivity.class);
+                startActivity(addEmployeeIntent);
+            }
+        });
 
 
     }

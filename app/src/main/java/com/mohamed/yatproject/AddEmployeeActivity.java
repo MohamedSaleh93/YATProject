@@ -21,13 +21,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-public class SignupActivity extends AppCompatActivity {
+public class AddEmployeeActivity extends AppCompatActivity {
 
-    private ImageView addUserImage;
-    private EditText emailEditText,
-            passwordEditText;
-    private Button alreadyHaveAccountBtn;
-    private Button signUpButton;
+    private Button addEmployeeBtn;
+    private ImageView employeeImage;
+    private EditText employeeNameET;
+    private EditText employeePositionET;
+    private EditText employeeAgeET;
+    private EditText employeePhoneET;
+    private EditText employeeSalaryET;
 
     private static final int REQUEST_STORAGE_CODE = 1000;
     private static final int CAMERA_CODE = 1001;
@@ -38,42 +40,49 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.signup_screen);
-        initializeView();
-        setViewsOnClickListeners();
-    }
+        setContentView(R.layout.activity_add_employees);
+        initViews();
 
-    /**
-     * To initialize the views
-     */
-    private void initializeView() {
-        addUserImage = findViewById(R.id.addUserImage);
-        emailEditText = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        alreadyHaveAccountBtn = findViewById(R.id.alreadyHaveAccountBtn);
-        signUpButton = findViewById(R.id.signUpBtn);
-    }
+        addEmployeeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validateInputs()) {
+                    // TODO add employee to database
+                } else {
+                    Toast.makeText(AddEmployeeActivity.this,
+                            R.string.add_valid_employee_data, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
-    private void setViewsOnClickListeners() {
-        addUserImage.setOnClickListener(new View.OnClickListener() {
+        employeeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openCameraOrGallery();
             }
         });
-        alreadyHaveAccountBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alreadyHaveAccountClicked();
-            }
-        });
+    }
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signUpClicked();
-            }
-        });
+    private void initViews() {
+        addEmployeeBtn = findViewById(R.id.addEmployeeBtn);
+        employeeImage = findViewById(R.id.employeeImage);
+        employeeNameET = findViewById(R.id.employeeNameET);
+        employeePositionET = findViewById(R.id.employeePositionET);
+        employeeAgeET = findViewById(R.id.employeeAgeET);
+        employeePhoneET = findViewById(R.id.employeePhoneET);
+        employeeSalaryET = findViewById(R.id.employeeSalary);
+    }
+
+    private boolean validateInputs() {
+        if (TextUtils.isEmpty(employeeNameET.getText().toString()) ||
+        TextUtils.isEmpty(employeePositionET.getText().toString()) ||
+        TextUtils.isEmpty(employeeAgeET.getText().toString()) ||
+        TextUtils.isEmpty(employeePhoneET.getText().toString()) ||
+        TextUtils.isEmpty(employeeSalaryET.getText().toString()) ||
+        !isUserAddedImage) {
+            return false;
+        }
+        return true;
     }
 
     private void openCameraOrGallery() {
@@ -149,7 +158,7 @@ public class SignupActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 if (selectedImage != null) {
                     isUserAddedImage = true;
-                    addUserImage.setImageURI(selectedImage);
+                    employeeImage.setImageURI(selectedImage);
                 }
             } else {
                 Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_LONG).show();
@@ -159,33 +168,11 @@ public class SignupActivity extends AppCompatActivity {
                 Bitmap selectedImage  = (Bitmap) data.getExtras().get("data");
                 if (selectedImage != null) {
                     isUserAddedImage = true;
-                    addUserImage.setImageBitmap(selectedImage);
+                    employeeImage.setImageBitmap(selectedImage);
                 }
             } else {
                 Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_LONG).show();
             }
-        }
-    }
-
-    private void alreadyHaveAccountClicked() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-    }
-
-    private void signUpClicked() {
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-
-        if (TextUtils.isEmpty(email)) {
-            emailEditText.setError(getString(R.string.please_enter_email));
-        } else if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError(getString(R.string.please_enter_password));
-        } else if (password.length() < 8) {
-            passwordEditText.setError(getString(R.string.password_should_be_greater));
-        } else if (!isUserAddedImage) {
-            Toast.makeText( this, "Please Add a photo", Toast.LENGTH_LONG).show();
-        } else {
-            // TODO add sign up logic
         }
     }
 }

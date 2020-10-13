@@ -11,4 +11,18 @@
     <string name="please_enter_email">Please Enter email</string>
     <string name="please_enter_password">Please Enter password</string>
     <string name="password_should_be_greater">Password should be greater that 8 characters</string>
+    <string name="name">Name</string>
+    <string name="position">Position</string>
+    <string name="age">Age</string>
+    <string name="phone">Phone</string>
+    <string name="salary">Salary</string>
+    <string name="add_employee">Add Employee</string>
+    <string name="add_valid_employee_data">Add valid employee data</string>
+    <string name="select_option">Select Option</string>
+    <string name="open_gallery">Open Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="cancel">Cancel</string>
+    <string name="please_allow_storage_permission_to_open_gallery">Please allow storage permission to open gallery</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="please_allow_camera_permission">Please allow Camera permission to take a photo</string>
 </resources>
