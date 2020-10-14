@@ -1,5 +1,7 @@
 package com.mohamed.yatproject;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,15 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mohamed.yatproject.database.employees.Employee;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeesRVAdapter extends RecyclerView.Adapter<EmployeesRVAdapter.EmployeesViewHolder> {
 
-    private ArrayList<String> employeesList;
+    private List<Employee> employeesList;
 
-    public EmployeesRVAdapter(ArrayList<String> employees) {
+    public EmployeesRVAdapter(List<Employee> employees) {
         this.employeesList = employees;
     }
 
@@ -28,8 +34,20 @@ public class EmployeesRVAdapter extends RecyclerView.Adapter<EmployeesRVAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EmployeesViewHolder holder, int position) {
-        holder.employeeName.setText(employeesList.get(position));
+    public void onBindViewHolder(@NonNull EmployeesViewHolder holder, final int position) {
+        holder.employeeName.setText(employeesList.get(position).name);
+        holder.employeePosition.setText(employeesList.get(position).position);
+        Uri imageUri = Uri.parse(Uri.decode(employeesList.get(position).imagePath));
+        holder.employeeAvatar.setImageURI(imageUri);
+
+        holder.employeesItemContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), EmployeeDetailsActivity.class);
+                i.putExtra("employee", employeesList.get(position));
+                v.getContext().startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -41,11 +59,15 @@ public class EmployeesRVAdapter extends RecyclerView.Adapter<EmployeesRVAdapter.
 
         ImageView employeeAvatar;
         TextView employeeName;
+        TextView employeePosition;
+        ConstraintLayout employeesItemContainer;
 
         public EmployeesViewHolder(@NonNull View itemView) {
             super(itemView);
             employeeAvatar = itemView.findViewById(R.id.employeeAvatar);
             employeeName = itemView.findViewById(R.id.employeeName);
+            employeePosition = itemView.findViewById(R.id.employeePosition);
+            employeesItemContainer = itemView.findViewById(R.id.employeesItemContainer);
         }
     }
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YatProject</string>
+    <string name="app_name">Employees Manager</string>
     <string name="enter_your_email">Enter your email</string>
     <string name="enter_one_of_your_email">Enter one of your emails</string>
     <string name="enter_your_password">Enter your password</string>
@@ -25,4 +25,9 @@
     <string name="please_allow_storage_permission_to_open_gallery">Please allow storage permission to open gallery</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="please_allow_camera_permission">Please allow Camera permission to take a photo</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="user_added_successfully">User Added Successfully</string>
+    <string name="invalid_email_or_password">Invalid email or password</string>
+    <string name="employee_added">Employee Added</string>
+    <string name="no_employees_saved">No employees saved</string>
 </resources>

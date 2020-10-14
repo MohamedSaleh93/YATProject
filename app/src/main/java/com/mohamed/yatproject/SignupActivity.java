@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.mohamed.yatproject.database.EmployeesDatabaseClient;
+import com.mohamed.yatproject.database.EmployeesManagerDatabase;
+import com.mohamed.yatproject.database.users.User;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -34,6 +40,8 @@ public class SignupActivity extends AppCompatActivity {
     private static final int OPEN_GALLERY_CODE = 200;
     private static final int TAKE_PHOTO_CODE = 201;
     private boolean isUserAddedImage = false;
+    private String imageUri;
+    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,6 +157,7 @@ public class SignupActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 if (selectedImage != null) {
                     isUserAddedImage = true;
+                    imageUri = selectedImage.toString();
                     addUserImage.setImageURI(selectedImage);
                 }
             } else {
@@ -170,11 +179,12 @@ public class SignupActivity extends AppCompatActivity {
     private void alreadyHaveAccountClicked() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void signUpClicked() {
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
+        final String email = emailEditText.getText().toString();
+        final String password = passwordEditText.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
             emailEditText.setError(getString(R.string.please_enter_email));
@@ -185,7 +195,35 @@ public class SignupActivity extends AppCompatActivity {
         } else if (!isUserAddedImage) {
             Toast.makeText( this, "Please Add a photo", Toast.LENGTH_LONG).show();
         } else {
-            // TODO add sign up logic
+            user = new User();
+            user.email = email;
+            user.password = password;
+            user.imagePath = imageUri;
+            new SaveUserThread().execute();
+        }
+    }
+
+    class SaveUserThread extends AsyncTask<Void, Void, Void> {
+
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            EmployeesDatabaseClient.getInstance(getApplicationContext())
+                    .getEmployeesManagerDatabase()
+                    .usersDAO()
+                    .insertUser(user);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(SignupActivity.this, R.string.user_added_successfully,
+                    Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 }

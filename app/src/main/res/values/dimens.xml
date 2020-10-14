@@ -13,4 +13,7 @@
     <dimen name="float_btn_margin">20dp</dimen>
     <dimen name="float_btn_size">60dp</dimen>
     <dimen name="button_padding">5dp</dimen>
+    <dimen name="splash_icon_width">220dp</dimen>
+    <dimen name="splash_icon_height">230dp</dimen>
+    <dimen name="splash_text_size">30sp</dimen>
 </resources>

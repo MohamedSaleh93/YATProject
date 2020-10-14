@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -20,6 +21,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.mohamed.yatproject.database.EmployeesDatabaseClient;
+import com.mohamed.yatproject.database.employees.Employee;
 
 public class AddEmployeeActivity extends AppCompatActivity {
 
@@ -36,6 +40,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private static final int OPEN_GALLERY_CODE = 200;
     private static final int TAKE_PHOTO_CODE = 201;
     private boolean isUserAddedImage = false;
+    private String imagePath;
+    private Employee employee;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +53,14 @@ public class AddEmployeeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
-                    // TODO add employee to database
+                    employee = new Employee();
+                    employee.name = employeeNameET.getText().toString();
+                    employee.age = Integer.valueOf(employeeAgeET.getText().toString());
+                    employee.phone = employeePhoneET.getText().toString();
+                    employee.position = employeePositionET.getText().toString();
+                    employee.salary = Double.valueOf(employeeSalaryET.getText().toString());
+                    employee.imagePath = imagePath;
+                    new AddEmployeeAsyncTask().execute();
                 } else {
                     Toast.makeText(AddEmployeeActivity.this,
                             R.string.add_valid_employee_data, Toast.LENGTH_LONG).show();
@@ -158,6 +171,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 Uri selectedImage = data.getData();
                 if (selectedImage != null) {
                     isUserAddedImage = true;
+                    imagePath = selectedImage.toString();
                     employeeImage.setImageURI(selectedImage);
                 }
             } else {
@@ -173,6 +187,25 @@ public class AddEmployeeActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    class AddEmployeeAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            EmployeesDatabaseClient.getInstance(getApplicationContext())
+                    .getEmployeesManagerDatabase()
+                    .employeesDAO()
+                    .insertEmployee(employee);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Toast.makeText(AddEmployeeActivity.this, R.string.employee_added, Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 }

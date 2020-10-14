@@ -7,4 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CustomEmployeeTextView">
+        <item name="android:textSize">@dimen/employee_name_size</item>
+        <item name="android:textColor">@color/button_color</item>
+        <item name="android:layout_marginTop">@dimen/margin_top</item>
+    </style>
+
 </resources>

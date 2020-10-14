@@ -80,10 +80,12 @@ public class MainActivity extends AppCompatActivity {
     private void loginButtonClicked() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
+        finish();
     }
 
     private void signUpButtonClicked() {
         Intent signupIntent = new Intent(this, SignupActivity.class);
         startActivity(signupIntent);
+        finish();
     }
 }
