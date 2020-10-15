@@ -30,9 +30,14 @@
 
         <activity android:name=".HomeActivity"/>
 
-        <activity android:name=".AddEmployeeActivity"/>
+        <activity android:name=".AddEmployeeActivity"
+            android:screenOrientation="portrait"/>
 
         <activity android:name=".EmployeeDetailsActivity"/>
+
+        <activity android:name=".AddEmployeeFragmentActivity"/>
+
+        <activity android:name=".SayHelloActivity"/>
 
     </application>
 

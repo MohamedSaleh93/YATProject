@@ -1,11 +1,16 @@
 package com.mohamed.yatproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView employeesRV;
     private FloatingActionButton addEmployeesBtn;
     private TextView noEmployeesError;
+    private final static int ADD_EMPLOYEE_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,15 +42,12 @@ public class HomeActivity extends AppCompatActivity {
         addEmployeesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addEmployeeIntent = new Intent(HomeActivity.this, AddEmployeeActivity.class);
-                startActivity(addEmployeeIntent);
+                Intent addEmployeeIntent = new Intent(HomeActivity.this,
+                        AddEmployeeActivity.class);
+                startActivityForResult(addEmployeeIntent, ADD_EMPLOYEE_REQUEST_CODE);
             }
         });
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         new GetEmployeeAsyncTask().execute();
     }
 
@@ -70,5 +73,37 @@ public class HomeActivity extends AppCompatActivity {
                 noEmployeesError.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_EMPLOYEE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                new GetEmployeeAsyncTask().execute();
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.home_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.logoutMenu) {
+            SharedPreferences sharedPreferences = getSharedPreferences("users", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("rememberme", false);
+            editor.apply();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

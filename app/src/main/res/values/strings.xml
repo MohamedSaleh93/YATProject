@@ -30,4 +30,5 @@
     <string name="invalid_email_or_password">Invalid email or password</string>
     <string name="employee_added">Employee Added</string>
     <string name="no_employees_saved">No employees saved</string>
+    <string name="logout">Logout</string>
 </resources>

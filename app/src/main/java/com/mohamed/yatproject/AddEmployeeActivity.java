@@ -46,7 +46,15 @@ public class AddEmployeeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_employees);
+        setContentView(R.layout.fragment_add_employees);
+
+        if (savedInstanceState != null) {
+            boolean isRotated = savedInstanceState.getBoolean("isRotated");
+            if (isRotated) {
+                Toast.makeText(this, "Rotated", Toast.LENGTH_LONG).show();
+            }
+        }
+        Intent intent = getIntent();
         initViews();
 
         addEmployeeBtn.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +92,12 @@ public class AddEmployeeActivity extends AppCompatActivity {
         employeeAgeET = findViewById(R.id.employeeAgeET);
         employeePhoneET = findViewById(R.id.employeePhoneET);
         employeeSalaryET = findViewById(R.id.employeeSalary);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isRotated", true);
     }
 
     private boolean validateInputs() {
@@ -205,6 +219,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Toast.makeText(AddEmployeeActivity.this, R.string.employee_added, Toast.LENGTH_LONG).show();
+            setResult(RESULT_OK);
             finish();
         }
     }
