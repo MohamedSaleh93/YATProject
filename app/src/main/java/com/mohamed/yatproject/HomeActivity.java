@@ -1,7 +1,9 @@
 package com.mohamed.yatproject;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,6 +31,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView noEmployeesError;
     private final static int ADD_EMPLOYEE_REQUEST_CODE = 100;
 
+    private NetworkChangeReceiver networkChangeReceiver;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +53,32 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         new GetEmployeeAsyncTask().execute();
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (networkChangeReceiver == null) {
+            networkChangeReceiver = new NetworkChangeReceiver();
+        }
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+
+        registerReceiver(networkChangeReceiver, filter);
+
+        Intent syncIntent = new Intent(this, SyncIntentService.class);
+        startService(syncIntent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (networkChangeReceiver != null) {
+            unregisterReceiver(networkChangeReceiver);
+        }
     }
 
     class GetEmployeeAsyncTask extends AsyncTask<Void, List<Employee>, List<Employee>> {
