@@ -44,6 +44,8 @@
 
         <activity android:name=".SayHelloActivity"/>
 
+        <activity android:name=".CustomViewActivity"/>
+
     </application>
 
 </manifest>

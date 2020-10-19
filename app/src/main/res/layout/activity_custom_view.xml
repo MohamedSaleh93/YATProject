@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mohamed.yatproject.EmojiView
+        android:id="@+id/emoji1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:faceColor="@android:color/holo_green_light"
+        app:eyesColor="@android:color/holo_red_dark"
+        app:borderColor="@android:color/white"
+        app:mouthColor="@android:color/holo_purple"
+        app:state="happy"
+        android:layout_margin="@dimen/margin_top"/>
+
+    <com.mohamed.yatproject.EmojiView
+        android:id="@+id/emoji2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_top"
+        app:state="sad"/>
+
+</LinearLayout>

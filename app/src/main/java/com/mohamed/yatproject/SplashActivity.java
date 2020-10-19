@@ -24,11 +24,11 @@ public class SplashActivity extends AppCompatActivity {
                 boolean rememberMe = sharedPreferences.getBoolean("rememberme", false);
 
                 if (rememberMe) {
-                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, CustomViewActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, CustomViewActivity.class);
                     startActivity(intent);
                     finish();
                 }
